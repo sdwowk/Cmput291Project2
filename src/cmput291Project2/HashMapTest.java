@@ -7,4 +7,9 @@ public class HashMapTest implements FileTest {
 		
 	}
 
+	public void createDB() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -7,4 +7,9 @@ public class BinaryTreeTest implements FileTest {
 		
 	}
 
+	public void createDB() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

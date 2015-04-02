@@ -13,10 +13,13 @@ public class Main {
 		
 		String input = null;
 		while(fileTest == null){
+			
 			input = console.readLine("Error in input please enter a proper file structure: ");
-			TestGenerator.getFileTest(input);
+			fileTest = TestGenerator.getFileTest(input);
+			
 		}
 		
+		fileTest.print();
 		
 	}
 }
