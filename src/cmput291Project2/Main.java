@@ -1,22 +1,23 @@
 package cmput291Project2;
 
-//import java.util.Scanner;
+import java.util.Scanner;
 import java.io.Console;
 
 public class Main {
-	static Console console;
+	static Scanner in;
+	private static FileTest fileTest;
+	
 	public static void main(String[] args){
-		FileTest fileTest = null;
+		fileTest = null;
 		
-		console = System.console();
-		//Scanner in = new Scanner(System.in);
+		in = new Scanner(System.in);
 		
 		fileTest = TestGenerator.getFileTest(args[0]);
 		
 		String input = null;
 		while(fileTest == null){
-			
-			input = console.readLine("Error in input please enter a proper file structure: ");
+			System.out.println("Error in input please enter a proper file structure: ");
+			input = in.nextLine();
 			fileTest = TestGenerator.getFileTest(input);
 			
 		}
@@ -29,9 +30,10 @@ public class Main {
 		System.out.println("5. Destroy the database");
 		System.out.println("6. Quit");
 		System.out.print("Please enter your choice: ");
-		//int choice = in.nextInt();
+		
+		int choice = in.nextInt();
 		//or alternatively if we don't want to use scanner
-		int choice = Integer.parseInt(System.console().readLine());
+		//int choice = Integer.parseInt(System.console().readLine());
 		
 		
 		switch(choice){
@@ -48,13 +50,15 @@ public class Main {
 				}
 				break;
 			case 2:
-				//get records with key
+				keyMenu();
 				break;
 			case 3:
-				//get data with key
+				//get data with data
+				dataMenu();
 				break;
 			case 4:
 				//get records in range
+				rangeMenu();
 				break;
 			case 5:
 				//destroy database
@@ -63,5 +67,37 @@ public class Main {
 				System.exit(0);
 				break;
 		}
+	}
+	private static void dataMenu() {
+		System.out.println("Please enter the data you would like to query with: ");
+		String query = in.nextLine();
+		
+		// Not sure how we are doing the next part yet
+		// fileTest.dataQuery(query);
+		
+	}
+	private static void keyMenu() {
+		System.out.println("Please enter the key you would like to query with: ");
+		String query = in.nextLine();
+		// Not sure how we are doing the next part yet
+		// fileTest.keyQuery(query);
+	}
+	
+	private static void rangeMenu(){
+		System.out.println("Please enter the range you would like to query with: (Two numbers separated by a hyphen)");
+		String query = in.nextLine();
+		
+		/*** Doubles or Ints? ***/
+		Double numOne = Double.parseDouble(query.split("-")[0].trim());
+		Double numTwo = Double.parseDouble(query.split("-")[1].trim());
+		
+		/* Unsure of the execution but something like this
+		if(numOne > numTwo){
+			fileTest.rangeQuery(numTwo, numOne);
+		}else{
+			fileTest.rangeQuery(numOne, numTwo);
+		}
+		*/
+
 	}
 }
