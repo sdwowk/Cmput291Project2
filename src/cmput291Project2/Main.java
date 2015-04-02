@@ -87,9 +87,9 @@ public class Main {
 		System.out.println("Please enter the range you would like to query with: (Two numbers separated by a hyphen)");
 		String query = in.nextLine();
 		
-		/*** Doubles or Ints? ***/
-		Double numOne = Double.parseDouble(query.split("-")[0].trim());
-		Double numTwo = Double.parseDouble(query.split("-")[1].trim());
+		
+		Integer numOne = Integer.parseInt(query.split("-")[0].trim());
+		Integer numTwo = Integer.parseInt(query.split("-")[1].trim());
 		
 		/* Unsure of the execution but something like this
 		if(numOne > numTwo){
