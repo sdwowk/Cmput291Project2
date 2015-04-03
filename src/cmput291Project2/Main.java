@@ -1,7 +1,10 @@
 package cmput291Project2;
 
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.Console;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
 	static Scanner in;
@@ -35,69 +38,92 @@ public class Main {
 		//or alternatively if we don't want to use scanner
 		//int choice = Integer.parseInt(System.console().readLine());
 		
-		
-		switch(choice){
-			case 1:
-				if (args[0].toLowerCase().equals("db_btree")){
-					//do btree stuff
-				}
-				else if (args[0].toLowerCase().equals("db_hash")){
-					//do hash tree stuff
-				}
-				else{
-					System.out.println("Invalid argument entered, exiting");
+		while(true){
+			switch(choice){
+				case 1:
+					fileTest.createDB();
+					
+					break;
+				case 2:
+					keyMenu();
+					break;
+				case 3:
+					//get data with data
+					dataMenu();
+					break;
+				case 4:
+					//get records in range
+					rangeMenu();
+					break;
+				case 5:
+					//destroy database
+					break;
+				case 6:
 					System.exit(0);
-				}
-				break;
-			case 2:
-				keyMenu();
-				break;
-			case 3:
-				//get data with data
-				dataMenu();
-				break;
-			case 4:
-				//get records in range
-				rangeMenu();
-				break;
-			case 5:
-				//destroy database
-				break;
-			case 6:
-				System.exit(0);
-				break;
+					break;
+			}
 		}
 	}
+	
 	private static void dataMenu() {
 		System.out.println("Please enter the data you would like to query with: ");
 		String query = in.nextLine();
 		
+		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
-		// fileTest.dataQuery(query);
+		//ArrayList<String> dataQueryList = fileTest.dataQuery(query);
+		//print(dataQueryList);
 		
 	}
 	private static void keyMenu() {
 		System.out.println("Please enter the key you would like to query with: ");
 		String query = in.nextLine();
+		
+		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
-		// fileTest.keyQuery(query);
+		// ArrayList<String> keyQueryList = fileTest.keyQuery(query);
 	}
 	
 	private static void rangeMenu(){
 		System.out.println("Please enter the range you would like to query with: (Two numbers separated by a hyphen)");
 		String query = in.nextLine();
 		
-		
-		Integer numOne = Integer.parseInt(query.split("-")[0].trim());
-		Integer numTwo = Integer.parseInt(query.split("-")[1].trim());
+		/*** Need to store the data results to a file called answers ***/
+		String numOne = query.split("-")[0].trim();
+		String numTwo = query.split("-")[1].trim();
 		
 		/* Unsure of the execution but something like this
-		if(numOne > numTwo){
-			fileTest.rangeQuery(numTwo, numOne);
-		}else{
-			fileTest.rangeQuery(numOne, numTwo);
+		
+			ArrayList<String> rangeQueryList = fileTest.rangeQuery(numOne, numTwo);
+			
 		}
 		*/
 
+	}
+	
+	private static void writeAnswers(String input)
+	{
+		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
+		BufferedWriter bufwrit = null;
+		try{
+			bufwrit = new BufferedWriter(new FileWriter("answers",true));
+			bufwrit.write(input);
+			bufwrit.newLine();
+			bufwrit.flush();
+		}
+		catch(IOException e){
+			System.out.println("Something went wrong writing to answers.");
+			e.printStackTrace();
+		}
+		finally{
+			if (bufwrit == null)
+			{
+				try {
+					bufwrit.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} 
+		}
 	}
 }
