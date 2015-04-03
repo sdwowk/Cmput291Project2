@@ -58,7 +58,7 @@ public class Main {
 				case 5:
 					//destroy database
 					//close database
-					//my_table.close();
+					fileTest.closeDB();
 					File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
 					try{
 						db.delete();

@@ -25,6 +25,6 @@ class TestGenerator {
 		
 		types.put("btree", new BinaryTreeTest());
 		types.put("hash", new HashMapTest());
-		types.put("index", new IndexTest());
+		types.put("indexfile", new IndexTest());
 	}
 }
