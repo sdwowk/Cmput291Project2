@@ -8,7 +8,7 @@ public class HashMapTest implements FileTest {
 	//inside of /tmp/sdwowk_mstrong_db/ - if key retrieval / database destruction uses 
 	//the same commands, keeping the table name the same across db types may
 	//make our work simpler in the long run
-	private static final String HASH_TABLE = "/tmp/sdwowk_mstrong_db/Hash_Table";
+	private static final String HASH_TABLE = "/tmp/sdwowk_mstrong_db/Data_Table";
 
 	public void createDB() {
 		try{	

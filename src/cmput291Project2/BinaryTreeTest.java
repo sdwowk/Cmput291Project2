@@ -4,7 +4,7 @@ import java.util.Random;
 import com.sleepycat.db.*;
 
 public class BinaryTreeTest implements FileTest {
-	private static final String BINARY_TABLE = "/tmp/sdwowk_mstrong_db/Binary_Table";
+	private static final String BINARY_TABLE = "/tmp/sdwowk_mstrong_db/Data_Table";
 	private static final int RECORD_NUM = 100000;
 	
 	/*** createDB and populateTable has been modified from the sample code given by Dr. Li Yuan ***/
