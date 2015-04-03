@@ -2,11 +2,9 @@ package cmput291Project2;
 
 import java.util.Scanner;
 import java.io.BufferedWriter;
-import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.File;
 
 public class Main {
 	static Scanner in;

@@ -6,6 +6,7 @@ import com.sleepycat.db.*;
 public class BinaryTreeTest implements FileTest {
 	private static final String BINARY_TABLE = "/tmp/sdwowk_mstrong_db/Data_Table";
 	private static final int RECORD_NUM = 100000;
+	private static Database my_table;
 	
 	/*** createDB and populateTable has been modified from the sample code given by Dr. Li Yuan ***/
 	public void createDB() {
@@ -15,7 +16,7 @@ public class BinaryTreeTest implements FileTest {
 		    DatabaseConfig dbConfig = new DatabaseConfig();
 		    dbConfig.setType(DatabaseType.BTREE);
 		    dbConfig.setAllowCreate(true);
-		    Database my_table = new Database(BINARY_TABLE, null, dbConfig);
+		    my_table = new Database(BINARY_TABLE, null, dbConfig);
 		    System.out.println(BINARY_TABLE + " has been created");
 	
 		    /* populate the new database with NO_RECORDS records */
