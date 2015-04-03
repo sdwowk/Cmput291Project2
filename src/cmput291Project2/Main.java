@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.Console;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
 
 public class Main {
 	static Scanner in;
@@ -57,6 +58,10 @@ public class Main {
 					break;
 				case 5:
 					//destroy database
+					//close database
+					//my_table.close();
+					File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
+					db.delete();
 					break;
 				case 6:
 					System.exit(0);
