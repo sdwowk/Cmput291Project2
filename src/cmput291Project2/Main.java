@@ -61,7 +61,12 @@ public class Main {
 					//close database
 					//my_table.close();
 					File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
-					db.delete();
+					try{
+						db.delete();
+					}
+					catch(Exception e){
+						System.out.println("Could not delete database");
+					}
 					break;
 				case 6:
 					System.exit(0);
