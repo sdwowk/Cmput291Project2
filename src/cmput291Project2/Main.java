@@ -1,7 +1,10 @@
 package cmput291Project2;
 
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.Console;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
 	static Scanner in;
@@ -96,5 +99,31 @@ public class Main {
 		}
 		*/
 
+	}
+	
+	private static void writeAnswers(String input)
+	{
+		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
+		BufferedWriter bufwrit = null;
+		try{
+			bufwrit = new BufferedWriter(new FileWriter("answers",true));
+			bufwrit.write(input);
+			bufwrit.newLine();
+			bufwrit.flush();
+		}
+		catch(IOException e){
+			System.out.println("Something went wrong writing to answers.");
+			e.printStackTrace();
+		}
+		finally{
+			if (bufwrit == null)
+			{
+				try {
+					bufwrit.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} 
+		}
 	}
 }
