@@ -138,5 +138,61 @@ public abstract class FileTest {
     	return returnKey;
     }
     
+    public boolean inRange(String start, String end, byte[] foundKeyByte)
+    {
+    	String foundKey = "";
+    	/*take first few characters of foundKeyByte and turn into a String*/
+    	for ( int j = 0; j < start.length(); j++ ) 
+  		  foundKey+=(new Character((char)(foundKeyByte[j]))).toString();
+    	if (start.compareTo(foundKey) >= 0)
+    		if(start.compareTo(foundKey) <= 0)
+    			return true;
+    	return false;
+    }
+    
+    public ArrayList<String> getRange(String start, String end)
+    {
+    	/*Similar method to getKey, add matches to ArrayList until start=end*/
+    	ArrayList<String> returnList = new ArrayList<String>();
+    	String temp;
+    	boolean amIinRange = false;
+    	try {
+    		DatabaseEntry foundData = new DatabaseEntry();
+    		DatabaseEntry returnKeyByte = new DatabaseEntry();
+			myCursor = my_table.openCursor(null, null);
+			
+			
+			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+			{
+				if(inRange(start, end, foundData.getData()))
+				{
+					amIinRange = true;
+					/*we should probably just be writing the key/data pair to answers, 
+					 * and not even bother with returning the data at all
+					 */
+					temp = new String(foundData.getData(), "UTF-8");
+					returnList.add(temp);
+				}
+				else
+					if(amIinRange == true)
+						break;
+				
+			}
+			
+	System.out.println("There were " + returnList.size() + "key/value pairs found.");
 
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} finally{
+			if (myCursor!=null)
+			{
+				try {
+					myCursor.close();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+    	return returnList;
+    }
 }
