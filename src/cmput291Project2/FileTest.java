@@ -1,11 +1,15 @@
 package cmput291Project2;
 
+import java.util.ArrayList;
 import java.util.Random;
+
+import com.sleepycat.db.*;
 
 public abstract class FileTest {
 	private static final String TABLE = "/tmp/sdwowk_mstrong_db/Data_Table";
 	private static final int RECORD_NUM = 100000;
 	private static final Database my_table;
+	private static Cursor myCursor = null;
 	
 	void createDB() {
 	}
@@ -69,6 +73,70 @@ public abstract class FileTest {
     }
     
     public void closeDB(){
-    	my_table.close();
+    	try {
+			my_table.close();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+			System.out.println("Error closing Database!");
+		}
     }
+    
+    public String getData(String in_key){
+    	/*Performs basic search for given key*/
+    	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
+    	DatabaseEntry returnDataByte = new DatabaseEntry();
+    	try{
+    		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+    		{
+    			String returnData = new String(returnDataByte.getData(), "UTF-8");
+    			System.out.println("One key/data pair retrieved.");
+    			return returnData;
+    		}
+    		else{
+    			System.out.println("Zero key/data pairs retrieved.");
+    			return "No results found.";
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return "Exception occurred, unable to search for data";
+    }
+    
+    public String getKey(String in_data){
+    	String returnKey = "Exception occurred, unable to search for key";
+    	try {
+    		DatabaseEntry searchData = new DatabaseEntry(in_data.getBytes());
+    		DatabaseEntry foundData = new DatabaseEntry();
+    		DatabaseEntry returnKeyByte = new DatabaseEntry();
+			myCursor = my_table.openCursor(null, null);
+			
+			/*This feels dirty but I can't think of a better way to search by data*/
+			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+			{
+				if (searchData.equals(foundData.getData())){
+					System.out.println("One record retrieved");
+					/*unsure of why it says this type of encoding is unsupported*/
+					returnKey = new String(returnKeyByte.getData(), "UTF-8");
+					break;
+				}
+			}
+			System.out.println("Zero key/data pairs retrieved.");
+			return "Key not found";
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} finally{
+			if (myCursor!=null)
+			{
+				try {
+					myCursor.close();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+    	return returnKey;
+    }
+    
+
 }
