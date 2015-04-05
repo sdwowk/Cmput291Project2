@@ -81,8 +81,9 @@ public abstract class FileTest {
 		}
     }
     
-    public String getData(String in_key){
+    public ArrayList<String> getData(String in_key){
     	/*Performs basic search for given key*/
+    	ArrayList<String> returns = new ArrayList<String>();
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
     	try{
@@ -90,17 +91,18 @@ public abstract class FileTest {
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
-    			return returnData;
+    			returns.add(returnData);
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
-    			return "No results found.";
     		}
+    		return returns;
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	return "Exception occurred, unable to search for data";
+    	System.out.println("Exception occurred, unable to search for data");
+    	return null;
     }
     
     public ArrayList<String> getKey(String in_data){

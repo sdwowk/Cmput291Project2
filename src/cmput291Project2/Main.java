@@ -1,5 +1,6 @@
 package cmput291Project2;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -91,6 +92,12 @@ public class Main {
 		System.out.println("Please enter the data you would like to query with: ");
 		String query = in.nextLine();
 		
+		long start = System.nanoTime();
+		ArrayList<String> result = fileTest.getKey(query);
+		long end = System.nanoTime();
+		System.out.println("Time taken to execute query: " + (start-end));
+		
+		//writeAnswers(result);
 		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
 		//ArrayList<String> dataQueryList = fileTest.dataQuery(query);
@@ -101,6 +108,15 @@ public class Main {
 		System.out.println("Please enter the key you would like to query with: ");
 		String query = in.nextLine();
 		
+		long start = System.nanoTime();
+		ArrayList<String> result = fileTest.getData(query);
+		long end = System.nanoTime();
+		System.out.println("Time taken to execute query: " + (start-end));
+		
+		//(if result == null){
+		//	System.out.println("Nothing found");
+		//}else{
+		// 	writeAnswers(result);
 		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
 		// ArrayList<String> keyQueryList = fileTest.keyQuery(query);
@@ -113,6 +129,12 @@ public class Main {
 		/*** Need to store the data results to a file called answers ***/
 		String numOne = query.split("-")[0].trim();
 		String numTwo = query.split("-")[1].trim();
+		
+		long start = System.nanoTime();
+		ArrayList<String[]> result = fileTest.getRange(numOne, numTwo);
+		long end = System.nanoTime();
+		System.out.println("Time taken to execute query: " + (start-end));
+		
 		
 		/* Unsure of the execution but something like this
 		
