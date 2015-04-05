@@ -8,7 +8,7 @@ public class HashMapTest extends FileTest {
 	//inside of /tmp/sdwowk_mstrong_db/ - if key retrieval / database destruction uses 
 	//the same commands, keeping the table name the same across db types may
 	//make our work simpler in the long run
-	private static final String HASH_TABLE;
+	private static String HASH_TABLE;
 	private static Database my_table;
 	
 	public HashMapTest(){

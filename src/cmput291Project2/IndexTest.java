@@ -1,18 +1,29 @@
 package cmput291Project2;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.sleepycat.db.Cursor;
+import com.sleepycat.db.Database;
+import com.sleepycat.db.DatabaseConfig;
+import com.sleepycat.db.DatabaseEntry;
+import com.sleepycat.db.DatabaseException;
+import com.sleepycat.db.DatabaseType;
+import com.sleepycat.db.LockMode;
+import com.sleepycat.db.OperationStatus;
 
 public class IndexTest extends FileTest {
 	/***
 	 * IndexTest creates two databases that have their key's and data is swapped. THis should make data search much more efficient 
 	 */
 	
-	private static final String INDEX_TABLE;
-	private static final String DATA_TABLE;
+	private static String INDEX_TABLE;
+	private static String DATA_TABLE;
 	private static Database my_table;
 	private static Database index;
 	private static int RECORD_NUM = 100000;
+	private static Cursor myCursor = null;
 	
 	public IndexTest(){
 		INDEX_TABLE = "/tmp/sdwowk_mstrong_db/Index_Table";
@@ -39,8 +50,7 @@ public class IndexTest extends FileTest {
 		}
 	}
 	
-	@Override
-	static void populateTable(Database index){
+	static void populateTable(Database index) {
 		int range;
         DatabaseEntry keydb, datadb;
 	String s;
@@ -93,7 +103,8 @@ public class IndexTest extends FileTest {
 	}
 	
 	@Override
-	public String getData(String in_key){
+	public ArrayList<String> getData(String in_key){
+		ArrayList<String> returnList = new ArrayList<String>();
     	/*Performs basic search for given key*/
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
@@ -102,41 +113,43 @@ public class IndexTest extends FileTest {
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
-    			return returnData;
+    			returnList.add(returnData);
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
-    			return "No results found.";
+    			
     		}
+    		return returnList;
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	return "Exception occurred, unable to search for data";
+    	return null;
     }
 	
 	
 	@Override
-    public String getKey(String in_data){
+    public ArrayList<String> getKey(String in_data){
     	/*Performs basic search for given key*/
     	DatabaseEntry searchKey = new DatabaseEntry(in_data.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
+    	ArrayList<String> returns = new ArrayList<String>();
     	try{
     		if(index.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
-    			return returnData;
+    			returns.add(returnData);
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
-    			return "No results found.";
     		}
+    		return returns;
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	return "Exception occurred, unable to search for data";
+    	return null;
     }
 
 	@Override
@@ -163,7 +176,7 @@ public class IndexTest extends FileTest {
 					 * and not even bother with returning the data at all
 					 */
 					
-					tempK = new String(returnKeyByte, "UTF-8");
+					tempK = new String(returnKeyByte.getData(), "UTF-8");
 					temp = new String(foundData.getData(), "UTF-8");
 					returnListArray[0] = tempK;
 					returnListArray[1] = temp;
@@ -181,7 +194,9 @@ public class IndexTest extends FileTest {
 
     	} catch (DatabaseException e) {
 			e.printStackTrace();
-    	} finally{
+    	} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally{
     		if (myCursor!=null)
 			{
 				try {

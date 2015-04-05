@@ -1,5 +1,6 @@
 package cmput291Project2;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,7 +9,7 @@ import com.sleepycat.db.*;
 public abstract class FileTest {
 	private static final String TABLE = "/tmp/sdwowk_mstrong_db/Data_Table";
 	private static final int RECORD_NUM = 100000;
-	private static final Database my_table;
+	private static Database my_table;
 	private static Cursor myCursor = null;
 	
 	void createDB() {
@@ -129,9 +130,12 @@ public abstract class FileTest {
 					returnList.add(returnKey);
 				}
 			}
-			System.out.println("Zero key/data pairs retrieved.");
-			return "Key not found";
+			//System.out.println("Zero key/data pairs retrieved.");
+			
+			return returnList;
 		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} finally{
 			if (myCursor!=null)
@@ -143,7 +147,7 @@ public abstract class FileTest {
 				}
 			}
 		}
-    	return returnKey;
+    	return null;
     }
     
     public boolean inRange(String start, String end, byte[] foundKeyByte)
@@ -181,7 +185,7 @@ public abstract class FileTest {
 					 * and not even bother with returning the data at all
 					 */
 					
-					tempK = new String(returnKeyByte, "UTF-8");
+					tempK = new String(returnKeyByte.getData(), "UTF-8");
 					temp = new String(foundData.getData(), "UTF-8");
 					returnListArray[0] = tempK;
 					returnListArray[1] = temp;
@@ -198,6 +202,8 @@ public abstract class FileTest {
 	System.out.println("There were " + returnList.size() + "key/value pairs found.");
 
 		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} finally{
 			if (myCursor!=null)

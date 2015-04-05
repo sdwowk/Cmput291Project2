@@ -4,7 +4,7 @@ import java.util.Random;
 import com.sleepycat.db.*;
 
 public class BinaryTreeTest extends FileTest {
-	private static final String BINARY_TABLE;
+	private static String BINARY_TABLE;
 	private static Database my_table;
 	
 	public BinaryTreeTest(){
