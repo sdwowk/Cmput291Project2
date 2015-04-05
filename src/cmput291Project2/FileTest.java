@@ -103,8 +103,9 @@ public abstract class FileTest {
     	return "Exception occurred, unable to search for data";
     }
     
-    public String getKey(String in_data){
+    public ArrayList<String> getKey(String in_data){
     	String returnKey = "Exception occurred, unable to search for key";
+    	ArrayList<String> returnList = new ArrayList<String>();
     	try {
     		
     		DatabaseEntry searchData = new DatabaseEntry(in_data.getBytes());
@@ -119,7 +120,7 @@ public abstract class FileTest {
 					System.out.println("One record retrieved");
 					/*unsure of why it says this type of encoding is unsupported*/
 					returnKey = new String(returnKeyByte.getData(), "UTF-8");
-					break;
+					returnList.add(returnKey);
 				}
 			}
 			System.out.println("Zero key/data pairs retrieved.");

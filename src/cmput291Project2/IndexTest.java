@@ -140,7 +140,7 @@ public class IndexTest extends FileTest {
     }
 
 	@Override
-    public ArrayList<String> getRange(String start, String end)
+    public ArrayList<String[]> getRange(String start, String end)
     {
 		/*Similar method to getKey, add matches to ArrayList until start=end*/
     	ArrayList<String[]> returnList = new ArrayList<String[]>();
