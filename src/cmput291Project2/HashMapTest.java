@@ -19,16 +19,15 @@ public class HashMapTest extends FileTest {
 	public void createDB() {
 		try{	
 			// Create the database object.
-		    // There is no environment for this simple example.
 		    DatabaseConfig dbConfig = new DatabaseConfig();
 		    dbConfig.setType(DatabaseType.HASH);
 		    dbConfig.setAllowCreate(true);
 		    my_table = new Database(HASH_TABLE, null, dbConfig);
 		    System.out.println(HASH_TABLE + " has been created");
 	
-		    /* populate the new database with NO_RECORDS records */
+		    /* populate the new database RECORD_NUM records */
 		    //I think we can reuse populateTable, key/data insertion seems to be the same..
-		    BinaryTreeTest.populateTable(my_table);
+		    this.populateTable(my_table);
 		    System.out.println("100 000 records inserted into" + HASH_TABLE);
 		}catch(Exception e){
 			System.err.println("Error Creating Database");

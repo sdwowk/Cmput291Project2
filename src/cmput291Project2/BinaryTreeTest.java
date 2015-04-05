@@ -16,7 +16,6 @@ public class BinaryTreeTest extends FileTest {
 	public void createDB() {
 		try{	
 			// Create the database object.
-		    // There is no environment for this simple example.
 		    DatabaseConfig dbConfig = new DatabaseConfig();
 		    dbConfig.setType(DatabaseType.BTREE);
 		    dbConfig.setAllowCreate(true);
@@ -24,7 +23,7 @@ public class BinaryTreeTest extends FileTest {
 		    System.out.println(BINARY_TABLE + " has been created");
 	
 		    
-		    /* populate the new database with NO_RECORDS records, specified in  */
+		    /* populate the new database with RECORD_NUM records, specified in  */
 		    this.populateTable(my_table);
 		    System.out.println("100 000 records inserted into" + BINARY_TABLE);
 		}catch(Exception e){

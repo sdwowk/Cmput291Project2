@@ -15,7 +15,7 @@ public abstract class FileTest {
 	}
 	
 	/*
-     *  To populate the given table with nrecs records
+     *  To populate the given table with RECORD_NUM records
      */
     static void populateTable(Database my_table) {
 	int range;
