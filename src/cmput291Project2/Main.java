@@ -97,6 +97,9 @@ public class Main {
 		long end = System.nanoTime();
 		System.out.println("Time taken to execute query: " + (start-end));
 		
+		//for(String results : result){
+		//	writeAnswers(result);
+		//}
 		//writeAnswers(result);
 		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
@@ -116,7 +119,9 @@ public class Main {
 		//(if result == null){
 		//	System.out.println("Nothing found");
 		//}else{
-		// 	writeAnswers(result);
+		//	for(String results : result){
+		// 		writeAnswers(result);
+		//	}
 		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
 		// ArrayList<String> keyQueryList = fileTest.keyQuery(query);
@@ -137,6 +142,13 @@ public class Main {
 		
 		
 		/* Unsure of the execution but something like this
+		
+		for(String[] results : result){
+			writeAnswer(results[0], results[1]);
+			
+		}
+		
+		
 		
 			ArrayList<String> rangeQueryList = fileTest.rangeQuery(numOne, numTwo);
 			

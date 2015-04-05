@@ -42,7 +42,9 @@ public abstract class FileTest {
 		/* to create a DBT for key */
 		keydb = new DatabaseEntry(s.getBytes());
 		keydb.setSize(s.length()); 
-
+		if(i == 100){
+			System.out.println(s);
+		}
 
 		/* to generate a data string */
 		range = 64 + random.nextInt( 64 );
@@ -54,7 +56,9 @@ public abstract class FileTest {
 		/* to create a DBT for data */
 		datadb = new DatabaseEntry(s.getBytes());
 		datadb.setSize(s.length()); 
-
+		if(i == 100){
+			System.out.println(s);
+		}
 		/* to insert the key/data pair into the database */
                 my_table.putNoOverwrite(null, keydb, datadb);
             }
