@@ -106,6 +106,7 @@ public abstract class FileTest {
     public String getKey(String in_data){
     	String returnKey = "Exception occurred, unable to search for key";
     	try {
+    		
     		DatabaseEntry searchData = new DatabaseEntry(in_data.getBytes());
     		DatabaseEntry foundData = new DatabaseEntry();
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
@@ -150,11 +151,13 @@ public abstract class FileTest {
     	return false;
     }
     
-    public ArrayList<String> getRange(String start, String end)
+    public ArrayList<String[]> getRange(String start, String end)
     {
     	/*Similar method to getKey, add matches to ArrayList until start=end*/
-    	ArrayList<String> returnList = new ArrayList<String>();
+    	ArrayList<String[]> returnList = new ArrayList<String[]>();
     	String temp;
+    	String tempK;
+    	String[] returnListArray = new String[2];
     	boolean amIinRange = false;
     	try {
     		DatabaseEntry foundData = new DatabaseEntry();
@@ -170,8 +173,14 @@ public abstract class FileTest {
 					/*we should probably just be writing the key/data pair to answers, 
 					 * and not even bother with returning the data at all
 					 */
+					
+					tempK = new String(returnKeyByte, "UTF-8");
 					temp = new String(foundData.getData(), "UTF-8");
-					returnList.add(temp);
+					returnListArray[0] = tempK;
+					returnListArray[1] = temp;
+							
+					returnList.add(returnListArray);
+				
 				}
 				else
 					if(amIinRange == true)
