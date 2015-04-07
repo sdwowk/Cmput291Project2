@@ -66,7 +66,7 @@ public class Main {
 				case 5:
 					//destroy database
 					//close database
-					if(fileTest.getClass().equals(IndexTest.class)){
+					if(fileTest instanceof IndexTest){
 						fileTest.closeDB();
 						File idb = new File("/tmp/sdwowk_mstrong_db/Index_Table");
 						File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
