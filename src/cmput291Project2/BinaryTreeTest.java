@@ -1,4 +1,5 @@
 package cmput291Project2;
+import java.io.File;
 import java.util.Random;
 
 import com.sleepycat.db.*;
@@ -10,6 +11,7 @@ public class BinaryTreeTest extends FileTest {
 	public BinaryTreeTest(){
 		BINARY_TABLE = super.getPath();
 		my_table = super.getDB();
+		
 	}
 	
 	/*** createDB and populateTable has been modified from the sample code given by Dr. Li Yuan ***/
@@ -26,6 +28,7 @@ public class BinaryTreeTest extends FileTest {
 		    /* populate the new database with RECORD_NUM records, specified in  */
 		    this.populateTable(my_table);
 		    System.out.println("100 000 records inserted into" + BINARY_TABLE);
+		    super.setDB(my_table);
 		}catch(Exception e){
 			System.err.println("Error Creating Database");
 			System.err.println(e.getMessage());

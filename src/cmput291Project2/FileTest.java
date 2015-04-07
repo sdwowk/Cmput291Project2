@@ -46,6 +46,9 @@ public abstract class FileTest {
 		if(i == 100){
 			System.out.println(s);
 		}
+		if(i == 300){
+			System.out.println(s);
+		}
 
 		/* to generate a data string */
 		range = 64 + random.nextInt( 64 );
@@ -193,14 +196,13 @@ public abstract class FileTest {
 					returnList.add(returnListArray);
 				
 				}
-				else
-					if(amIinRange == true)
-						break;
+				//else
+					//if(amIinRange == true)
+						
 				
 			}
 			
-	System.out.println("There were " + returnList.size() + "key/value pairs found.");
-
+	
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -217,4 +219,8 @@ public abstract class FileTest {
 		}
     	return returnList;
     }
+
+	public void setDB(Database my_table2) {
+		my_table = my_table2;		
+	}
 }

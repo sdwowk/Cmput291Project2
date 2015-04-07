@@ -11,13 +11,18 @@ public class Main {
 	static Scanner in;
 	private static FileTest fileTest;
 	
-	public static void main(String[] args){
-		fileTest = null;
+	public static void main(String[] args) {
+		//fileTest = null;
 		
 		in = new Scanner(System.in);
 		
 		fileTest = TestGenerator.getFileTest(args[0]);
-		
+		if(fileTest == (null)){
+			System.err.println("BOO");
+		}
+		File newFile = new File(fileTest.getPath());
+		newFile.getParentFile().mkdirs();
+		/*
 		String input = null;
 		while(fileTest == null){
 			System.out.println("Error in input please enter a proper file structure: ");
@@ -25,21 +30,23 @@ public class Main {
 			fileTest = TestGenerator.getFileTest(input);
 			
 		}
-	
+		*/
 		//Display menu
-		System.out.println("1. Create and populate database");
-		System.out.println("2. Retrieve records with provided key");
-		System.out.println("3. Retrieve records with given data");
-		System.out.println("4. Retrieve records with a given range");
-		System.out.println("5. Destroy the database");
-		System.out.println("6. Quit");
-		System.out.print("Please enter your choice: ");
+//		System.out.println("1. Create and populate database");
+//		System.out.println("2. Retrieve records with provided key");
+//		System.out.println("3. Retrieve records with given data");
+//		System.out.println("4. Retrieve records with a given range");
+//		System.out.println("5. Destroy the database");
+//		System.out.println("6. Quit");
+//		System.out.print("Please enter your choice: ");
 		
-		int choice = in.nextInt();
+
 		//or alternatively if we don't want to use scanner
 		//int choice = Integer.parseInt(System.console().readLine());
 		
 		while(true){
+			displayOptions();
+			int choice = in.nextInt();
 			switch(choice){
 				case 1:
 					fileTest.createDB();
@@ -90,15 +97,15 @@ public class Main {
 	
 	private static void dataMenu() {
 		System.out.println("Please enter the data you would like to query with: ");
-		String query = in.nextLine();
+		String query = in.next();
 		
 		long start = System.nanoTime();
 		ArrayList<String> result = fileTest.getKey(query);
 		long end = System.nanoTime();
-		System.out.println("Time taken to execute query: " + (start-end));
-		
+		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
+		System.out.println("Number of files retrieved: " + result.size());
 		//for(String results : result){
-		//	writeAnswers(result);
+		//	writeAnswers(result, query);
 		//}
 		//writeAnswers(result);
 		/*** Need to store the data results to a file called answers ***/
@@ -109,27 +116,33 @@ public class Main {
 	}
 	private static void keyMenu() {
 		System.out.println("Please enter the key you would like to query with: ");
-		String query = in.nextLine();
-		
+		String query = in.next();
+	
 		long start = System.nanoTime();
 		ArrayList<String> result = fileTest.getData(query);
 		long end = System.nanoTime();
-		System.out.println("Time taken to execute query: " + (start-end));
+		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
+		System.out.println("Number of files retrieved: " + result.size());
 		
 		//(if result == null){
 		//	System.out.println("Nothing found");
 		//}else{
 		//	for(String results : result){
-		// 		writeAnswers(result);
+		// 		writeAnswers(query, result);
 		//	}
 		/*** Need to store the data results to a file called answers ***/
 		// Not sure how we are doing the next part yet
 		// ArrayList<String> keyQueryList = fileTest.keyQuery(query);
 	}
 	
+	private static long getMicros(long start, long end) {
+		//Convert nano time to Micro seconds
+		return ((end-start)/1000);
+	}
+
 	private static void rangeMenu(){
 		System.out.println("Please enter the range you would like to query with: (Two numbers separated by a hyphen)");
-		String query = in.nextLine();
+		String query = in.next();
 		
 		/*** Need to store the data results to a file called answers ***/
 		String numOne = query.split("-")[0].trim();
@@ -138,32 +151,34 @@ public class Main {
 		long start = System.nanoTime();
 		ArrayList<String[]> result = fileTest.getRange(numOne, numTwo);
 		long end = System.nanoTime();
-		System.out.println("Time taken to execute query: " + (start-end));
+		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
+		System.out.println("Number of files retrieved: " + result.size());
 		
 		
-		/* Unsure of the execution but something like this
+		// Unsure of the execution but something like this
 		
 		for(String[] results : result){
-			writeAnswer(results[0], results[1]);
+			writeAnswers(results[0], results[1]);
 			
 		}
 		
-		
-		
-			ArrayList<String> rangeQueryList = fileTest.rangeQuery(numOne, numTwo);
 			
-		}
-		*/
+		
+		
 
 	}
 	
-	private static void writeAnswers(String input)
+
+	private static void writeAnswers(String key, String data)
 	{
 		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
 		BufferedWriter bufwrit = null;
 		try{
 			bufwrit = new BufferedWriter(new FileWriter("answers",true));
-			bufwrit.write(input);
+			bufwrit.write("Key: " + key);
+			bufwrit.newLine();
+			bufwrit.write("Data: " + data);
+			bufwrit.newLine();
 			bufwrit.newLine();
 			bufwrit.flush();
 		}
@@ -182,5 +197,16 @@ public class Main {
 				} 
 			}
 		}
+	}
+	
+	private static void displayOptions(){
+		//Display menu
+		System.out.println("1. Create and populate database");
+		System.out.println("2. Retrieve records with provided key");
+		System.out.println("3. Retrieve records with given data");
+		System.out.println("4. Retrieve records with a given range");
+		System.out.println("5. Destroy the database");
+		System.out.println("6. Quit");
+		System.out.print("Please enter your choice: ");
 	}
 }
