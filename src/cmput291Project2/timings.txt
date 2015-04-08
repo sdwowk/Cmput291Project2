@@ -1,0 +1,26 @@
+Rangetest:
+Cases: [ccc-ttt], [aaa-bbb], [m-n], [ddddd-qwerty]
+Hash: (67858 pairs) 42214418us, (3987p) 2781179us, (7785p) 5221111us, (527772p) 32872864us
+BTREE: 42352622, 2471905, 4874387, 33025157
+(It appears that it isn't very practical to test with large ranges...)
+
+Cases set two: [aaaa-aaaz] (3p), [dddd-ddzz] (123), [maaa]-[mbdd](168), [aaa-abc](167)
+BTREE: 2042, 107664, 199303, 102323//redo tests, removed array code
+BTREE: 4628, 151236, 200071, 121908//second round of tests.. without array code...
+HASH: 241974, 386004, 457043, 434444
+INDEX: (8pairs...)253641, (119p..)305430, (142)368044, (166) 372754
+
+INDEX numbers are off a bit. I suspect either our seed is different... or something wonky is going on with table generation.
+
+
+I'm not doing getData till its totally finished... only finds one result..
+
+getKey:
+Data values: 
+(key 100) hwdcupqwmyixpkvckwdyqlibjcdqzivhkgvycqhuonfaibtkegwxurtginyjjjpaqjhcmmvifh
+(key 1000) zwsypquxlrotpbrumyxeeanrnjzlxfqjciiwgjhlkbguxzckbftyklhyngnumsncjjzagzeclnndavbeanmzdiglrxaf
+(key 4000) nnyadnooymkanauxsjehywwrasigozimlaljtuppfjuhdkzoyumtfrdlnhiciaaphtjeiqlhthapagvmnxeemsjzvoocmsydmazedfybwzwmn
+(key 6000) chmrfjdtifluidloobuevtageqrolimxnfivvqrbdevnvkgigutargprlcnuyljkzauautwywbqvxhvlaowfppoqpbpcssflapvznopfnyxzxywmigqhydgsoiinmg
+BTREE: 154308, 151796, 143335, 144434
+HASH: 245163, 193534, 187099, 195753
+INDEX: 110, 161, 156, 160
