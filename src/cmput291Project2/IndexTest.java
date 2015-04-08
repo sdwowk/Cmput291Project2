@@ -23,7 +23,7 @@ public class IndexTest extends FileTest {
 	private static Database my_table;
 	private static Database index;
 	private static int RECORD_NUM = 100000;
-	private static Cursor myCursor = null;
+	private static javafx.scene.Cursor myCursor = null;
 	
 	public IndexTest(){
 		INDEX_TABLE = "/tmp/sdwowk_mstrong_db/Index_Table";
@@ -113,8 +113,16 @@ public class IndexTest extends FileTest {
     		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
-    			System.out.println("One key/data pair retrieved.");
+    			//System.out.println("One key/data pair retrieved.");
     			returnList.add(returnData);
+    			
+    			myCursor = my_table.openCursor(null, null);
+    			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+    				String returnData = new String(returnDataByte.getData(), "UTF-8");
+        			returnList.add(returnData);
+
+    			}
+    			myCursor.close();
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
@@ -142,6 +150,12 @@ public class IndexTest extends FileTest {
     			System.out.println("One key/data pair retrieved.");
     			returns.add(returnData);
     			/*Add stuff from fileTest*/
+    			myCursor = index.openCursor(null, null);
+    			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+    				returnData = new String(returnDataByte.getData(), "UTF-8");
+    				returns.add(returnData);
+    			}
+    			myCursor.close();
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");

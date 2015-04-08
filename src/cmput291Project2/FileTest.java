@@ -103,7 +103,7 @@ public abstract class FileTest {
     		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
-    			System.out.println("One key/data pair retrieved.");
+
     			returns.add(returnData);
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
