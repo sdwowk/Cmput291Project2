@@ -1,5 +1,6 @@
 package cmput291Project2;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 import com.sleepycat.db.*;
@@ -34,6 +35,58 @@ public class BinaryTreeTest extends FileTest {
 			System.err.println(e.getMessage());
 		}
 	}
+	
+	@Override
+	public void getRange(String start, String end)
+    {
+    	/*Similar method to getKey, add matches to ArrayList until start=end*/
+    	String temp;
+    	String tempK;
+    	Cursor myCursor = null;
+    	int recordCount = 0;
+    	boolean amIinRange = false;
+    	try {
+    		DatabaseEntry foundData = new DatabaseEntry();
+    		DatabaseEntry returnKeyByte = new DatabaseEntry();
+			myCursor = my_table.openCursor(null, null);
+			
+			
+			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+			{
+
+				if(inRange(start, end, returnKeyByte.getData()))
+				{
+					amIinRange = true;
+					/*we should probably just be writing the key/data pair to answers, 
+					 * and not even bother with returning the data at all
+					 */
+					recordCount++;
+					tempK = new String(returnKeyByte.getData(), "UTF-8");
+					temp = new String(foundData.getData(), "UTF-8");
+					
+					writeAnswers(tempK,temp);				
+				}
+				else
+					if(amIinRange == true)
+						break;
+			}
+			System.out.println("There were " + recordCount + " key/value pairs retrieved.");
+	
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally{
+			if (myCursor!=null)
+			{
+				try {
+					myCursor.close();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+    }
 
 	
 }

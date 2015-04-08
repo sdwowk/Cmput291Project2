@@ -130,7 +130,7 @@ public class IndexTest extends FileTest {
 	
 	
 	@Override
-    public ArrayList<String> getKey(String in_data){
+    public void getKey(String in_data){
     	/*Performs basic search for given key*/
     	DatabaseEntry searchKey = new DatabaseEntry(in_data.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
@@ -141,27 +141,26 @@ public class IndexTest extends FileTest {
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
     			returns.add(returnData);
+    			/*Add stuff from fileTest*/
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
     		}
-    		return returns;
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	return null;
     }
 
 	@Override
-    public ArrayList<String[]> getRange(String start, String end)
+    public void getRange(String start, String end)
     {
 		/*Similar method to getKey, add matches to ArrayList until start=end*/
     	ArrayList<String[]> returnList = new ArrayList<String[]>();
     	String temp;
     	String tempK;
+    	int recordCount = 0;
     	String[] returnListArray = new String[2];
-    	boolean amIinRange = false;
     	try {
     		DatabaseEntry foundData = new DatabaseEntry();
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
@@ -172,27 +171,16 @@ public class IndexTest extends FileTest {
 			{
 				if(super.inRange(start, end, foundData.getData()))
 				{
-					amIinRange = true;
-					/*we should probably just be writing the key/data pair to answers, 
-					 * and not even bother with returning the data at all
-					 */
-					
+					recordCount++;
 					tempK = new String(returnKeyByte.getData(), "UTF-8");
 					temp = new String(foundData.getData(), "UTF-8");
-					returnListArray[0] = tempK;
-					returnListArray[1] = temp;
-							
-					returnList.add(returnListArray);
 				
-					super.writeAnswers(returnListArray[0], returnListArray[1]);
+					super.writeAnswers(tempK, temp);
 				}
-				else
-					if(amIinRange == true)
-						break;
 				
 			}
 			
-			System.out.println("There were " + returnList.size() + "key/value pairs found.");
+			System.out.println("There were " + recordCount + "key/value pairs found.");
 
     	} catch (DatabaseException e) {
 			e.printStackTrace();
@@ -208,7 +196,6 @@ public class IndexTest extends FileTest {
 				}
 			}
 		}
-    	return returnList;
     }
 	
 	@Override

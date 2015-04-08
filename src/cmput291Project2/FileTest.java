@@ -64,7 +64,7 @@ public abstract class FileTest {
 		/* to create a DBT for data */
 		datadb = new DatabaseEntry(s.getBytes());
 		datadb.setSize(s.length()); 
-		if(i == 100){
+		if(i == 100 || i == 1000 || i == 4000 || i == 6000){
 			System.out.println("Data: " + s);
 		}
 		/* to insert the key/data pair into the database */
