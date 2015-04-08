@@ -239,7 +239,7 @@ public abstract class FileTest {
 		my_table = my_table2;		
 	}
 	
-	private void writeAnswers(String key, String data)
+	public void writeAnswers(String key, String data)
 	{
 		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
 		BufferedWriter bufwrit = null;

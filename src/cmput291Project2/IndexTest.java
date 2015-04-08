@@ -44,6 +44,7 @@ public class IndexTest extends FileTest {
 		    
 		    populateTable(index);
 		    System.out.println("100 000 records inserted into" + INDEX_TABLE);
+		    super.setDB(my_table);
 		}catch(Exception e){
 			System.err.println("Error Creating Database");
 			System.err.println(e.getMessage());
@@ -183,6 +184,7 @@ public class IndexTest extends FileTest {
 							
 					returnList.add(returnListArray);
 				
+					super.writeAnswers(returnListArray[0], returnListArray[1]);
 				}
 				else
 					if(amIinRange == true)
