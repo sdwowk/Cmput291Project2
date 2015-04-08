@@ -125,9 +125,9 @@ public abstract class FileTest {
     	return null;
     }
     
-    public ArrayList<String> getKey(String in_data){
+    public void getKey(String in_data){
     	String returnKey = "Exception occurred, unable to search for key";
-    	ArrayList<String> returnList = new ArrayList<String>();
+    	int recordCount = 0;
     	try {
     		
     		DatabaseEntry searchData = new DatabaseEntry(in_data.getBytes());
@@ -138,16 +138,14 @@ public abstract class FileTest {
 			/*This feels dirty but I can't think of a better way to search by data*/
 			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
 			{
-				if (searchData.equals(foundData.getData())){
-					System.out.println("One record retrieved");
-					/*unsure of why it says this type of encoding is unsupported*/
+				if (searchData.equals(foundData)){
 					returnKey = new String(returnKeyByte.getData(), "UTF-8");
-					returnList.add(returnKey);
+					writeAnswers(returnKey, in_data);
+					recordCount++;
 				}
 			}
-			//System.out.println("Zero key/data pairs retrieved.");
+			System.out.println("There were " + recordCount + " keys retrieved");
 			
-			return returnList;
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -162,7 +160,6 @@ public abstract class FileTest {
 				}
 			}
 		}
-    	return null;
     }
     
     public boolean inRange(String start, String end, byte[] foundKeyByte)
@@ -177,13 +174,13 @@ public abstract class FileTest {
     	return false;
     }
     
-    public ArrayList<String[]> getRange(String start, String end)
+    public void getRange(String start, String end)
     {
     	/*Similar method to getKey, add matches to ArrayList until start=end*/
-    	ArrayList<String[]> returnList = new ArrayList<String[]>();
     	String temp;
     	String tempK;
     	String[] returnListArray = new String[2];
+    	int recordCount = 0;
     	boolean amIinRange = false;
     	try {
     		DatabaseEntry foundData = new DatabaseEntry();
@@ -200,7 +197,7 @@ public abstract class FileTest {
 					/*we should probably just be writing the key/data pair to answers, 
 					 * and not even bother with returning the data at all
 					 */
-					
+					recordCount++;
 					tempK = new String(returnKeyByte.getData(), "UTF-8");
 					temp = new String(foundData.getData(), "UTF-8");
 					returnListArray[0] = tempK;
@@ -213,10 +210,8 @@ public abstract class FileTest {
 				}
 				//else
 					//if(amIinRange == true)
-						
-				
 			}
-			
+			System.out.println("There were " + recordCount + " key/value pairs retrieved.");
 	
 		} catch (DatabaseException e) {
 			e.printStackTrace();
@@ -232,7 +227,6 @@ public abstract class FileTest {
 				}
 			}
 		}
-    	return returnList;
     }
 
 	public void setDB(Database my_table2) {

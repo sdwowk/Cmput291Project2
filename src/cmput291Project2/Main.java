@@ -56,7 +56,7 @@ public class Main {
 				case 5:
 					//destroy database
 					//close database
-					/*
+					
 					if(fileTest instanceof IndexTest){
 						fileTest.closeDB();
 						File idb = new File("/tmp/sdwowk_mstrong_db/Index_Table");
@@ -77,7 +77,7 @@ public class Main {
 						catch(Exception e){
 							System.out.println("Could not delete database");
 						}
-					}*/
+					}
 					break;
 				case 6:
 					System.exit(0);
@@ -98,10 +98,9 @@ public class Main {
 		String query = in.next();
 		
 		long start = System.nanoTime();
-		ArrayList<String> result = fileTest.getKey(query);
+		fileTest.getKey(query);
 		long end = System.nanoTime();
 		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
-		System.out.println("Number of files retrieved: " + result.size());
 		//for(String results : result){
 		//	writeAnswers(result, query);
 		//}
@@ -139,7 +138,7 @@ public class Main {
 	}
 
 	private static void rangeMenu(){
-		System.out.println("Please enter the range you would like to query with: (Two numbers separated by a hyphen)");
+		System.out.println("Please enter the range you would like to query with: (startRange-endRange)");
 		String query = in.next();
 		
 		/*** Need to store the data results to a file called answers ***/
@@ -147,19 +146,15 @@ public class Main {
 		String numTwo = query.split("-")[1].trim();
 		
 		long start = System.nanoTime();
-		ArrayList<String[]> result = fileTest.getRange(numOne, numTwo);
+		fileTest.getRange(numOne, numTwo);
 		long end = System.nanoTime();
 		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
-		System.out.println("Number of files retrieved: " + result.size());
 		
 		/*
 		for(String[] results : result){
 			writeAnswers(results[0], results[1]);
 		}
 		*/
-			
-		
-		
 
 	}
 	
