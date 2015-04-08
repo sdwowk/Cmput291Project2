@@ -117,7 +117,7 @@ public class IndexTest extends FileTest {
     			returnList.add(returnData);
     			
     			myCursor = my_table.openCursor(null, null);
-    			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+    			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				String returnData = new String(returnDataByte.getData(), "UTF-8");
         			returnList.add(returnData);
 
@@ -149,9 +149,10 @@ public class IndexTest extends FileTest {
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
     			returns.add(returnData);
-    			/*Add stuff from fileTest*/
+    			
+    			/*Add multiple values*/
     			myCursor = index.openCursor(null, null);
-    			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+    			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				returnData = new String(returnDataByte.getData(), "UTF-8");
     				returns.add(returnData);
     			}
