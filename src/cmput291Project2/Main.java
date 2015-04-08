@@ -56,6 +56,7 @@ public class Main {
 				case 5:
 					//destroy database
 					//close database
+					/*
 					if(fileTest instanceof IndexTest){
 						fileTest.closeDB();
 						File idb = new File("/tmp/sdwowk_mstrong_db/Index_Table");
@@ -76,7 +77,7 @@ public class Main {
 						catch(Exception e){
 							System.out.println("Could not delete database");
 						}
-					}
+					}*/
 					break;
 				case 6:
 					System.exit(0);
@@ -151,13 +152,11 @@ public class Main {
 		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
 		System.out.println("Number of files retrieved: " + result.size());
 		
-		
+		/*
 		for(String[] results : result){
-			//writeAnswers(results[0], results[1]);
-			System.out.println("Key: " + results[0]);
-			System.out.println("Data: " + results[1]);
+			writeAnswers(results[0], results[1]);
 		}
-		
+		*/
 			
 		
 		

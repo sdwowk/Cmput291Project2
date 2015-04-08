@@ -1,10 +1,14 @@
 package cmput291Project2;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.sleepycat.db.*;
+
 
 public abstract class FileTest {
 	private static final String TABLE = "/tmp/sdwowk_mstrong_db/Data_Table";
@@ -167,7 +171,7 @@ public abstract class FileTest {
     	/*take first few characters of foundKeyByte and turn into a String*/
     	for ( int j = 0; j < start.length(); j++ ) 
   		  foundKey+=(new Character((char)(foundKeyByte[j]))).toString();
-    	if (start.compareTo(foundKey) >= 0)
+    	if (end.compareTo(foundKey) >= 0)
     		if(start.compareTo(foundKey) <= 0)
     			return true;
     	return false;
@@ -201,8 +205,10 @@ public abstract class FileTest {
 					temp = new String(foundData.getData(), "UTF-8");
 					returnListArray[0] = tempK;
 					returnListArray[1] = temp;
-							
-					returnList.add(returnListArray);
+					
+					writeAnswers(returnListArray[0],returnListArray[1]);
+					
+					//returnList.add(returnListArray);
 				
 				}
 				//else
@@ -231,5 +237,35 @@ public abstract class FileTest {
 
 	public void setDB(Database my_table2) {
 		my_table = my_table2;		
+	}
+	
+	private void writeAnswers(String key, String data)
+	{
+		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
+		BufferedWriter bufwrit = null;
+		try{
+			bufwrit = new BufferedWriter(new FileWriter("answers.txt",true));
+			bufwrit.write("Key: " + key);
+			bufwrit.newLine();
+			bufwrit.write("Data: " + data);
+			bufwrit.newLine();
+			bufwrit.newLine();
+			bufwrit.flush();
+		}
+		catch(IOException e){
+			System.out.println("Something went wrong writing to answers.");
+			e.printStackTrace();
+		}
+		finally{
+			if (bufwrit == null)
+			{
+				try {
+					bufwrit.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				
+				} 
+			}
+		}
 	}
 }
