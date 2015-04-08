@@ -29,6 +29,8 @@ public class HashMapTest extends FileTest {
 		    //I think we can reuse populateTable, key/data insertion seems to be the same..
 		    this.populateTable(my_table);
 		    System.out.println("100 000 records inserted into" + HASH_TABLE);
+		    
+		    super.setDB(my_table);
 		}catch(Exception e){
 			System.err.println("Error Creating Database");
 			System.err.println(e.getMessage());

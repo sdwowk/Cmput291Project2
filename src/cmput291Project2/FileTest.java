@@ -44,10 +44,10 @@ public abstract class FileTest {
 		keydb = new DatabaseEntry(s.getBytes());
 		keydb.setSize(s.length()); 
 		if(i == 100){
-			System.out.println(s);
+			System.out.println("Key: " + s);
 		}
 		if(i == 300){
-			System.out.println(s);
+			System.out.println("Key: " +s);
 		}
 
 		/* to generate a data string */
@@ -61,7 +61,7 @@ public abstract class FileTest {
 		datadb = new DatabaseEntry(s.getBytes());
 		datadb.setSize(s.length()); 
 		if(i == 100){
-			System.out.println(s);
+			System.out.println("Data: " + s);
 		}
 		/* to insert the key/data pair into the database */
                 my_table.putNoOverwrite(null, keydb, datadb);
@@ -95,15 +95,23 @@ public abstract class FileTest {
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
     	try{
+    		
     		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
     			returns.add(returnData);
+    			myCursor = my_table.openCursor(null, null);
+    			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+    				returnData = new String(returnDataByte.getData(), "UTF-8");
+    				returns.add(returnData);
+    			}
+    			myCursor.close();
     		}
     		else{
-    			System.out.println("Zero key/data pairs retrieved.");
+    			//System.out.println("Zero key/data pairs retrieved.");
     		}
+    		
     		return returns;
     	}
     	catch(Exception e){
@@ -181,7 +189,8 @@ public abstract class FileTest {
 			
 			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
 			{
-				if(inRange(start, end, foundData.getData()))
+
+				if(inRange(start, end, returnKeyByte.getData()))
 				{
 					amIinRange = true;
 					/*we should probably just be writing the key/data pair to answers, 

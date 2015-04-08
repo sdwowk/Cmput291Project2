@@ -31,27 +31,17 @@ public class Main {
 			
 		}
 		*/
-		//Display menu
-//		System.out.println("1. Create and populate database");
-//		System.out.println("2. Retrieve records with provided key");
-//		System.out.println("3. Retrieve records with given data");
-//		System.out.println("4. Retrieve records with a given range");
-//		System.out.println("5. Destroy the database");
-//		System.out.println("6. Quit");
-//		System.out.print("Please enter your choice: ");
 		
 
-		//or alternatively if we don't want to use scanner
-		//int choice = Integer.parseInt(System.console().readLine());
-		
 		while(true){
+			
 			displayOptions();
 			int choice = in.nextInt();
 			switch(choice){
 				case 1:
-					fileTest.createDB();
-					
-					break;
+				fileTest.createDB();
+				
+				break;
 				case 2:
 					keyMenu();
 					break;
@@ -91,9 +81,16 @@ public class Main {
 				case 6:
 					System.exit(0);
 					break;
+				
+				default:
+					System.out.println("Improper input");
 			}
+				
+				
 		}
 	}
+		
+	
 	
 	private static void dataMenu() {
 		System.out.println("Please enter the data you would like to query with: ");
@@ -155,11 +152,10 @@ public class Main {
 		System.out.println("Number of files retrieved: " + result.size());
 		
 		
-		// Unsure of the execution but something like this
-		
 		for(String[] results : result){
-			writeAnswers(results[0], results[1]);
-			
+			//writeAnswers(results[0], results[1]);
+			System.out.println("Key: " + results[0]);
+			System.out.println("Data: " + results[1]);
 		}
 		
 			
@@ -174,7 +170,7 @@ public class Main {
 		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
 		BufferedWriter bufwrit = null;
 		try{
-			bufwrit = new BufferedWriter(new FileWriter("answers",true));
+			bufwrit = new BufferedWriter(new FileWriter("answers.txt",true));
 			bufwrit.write("Key: " + key);
 			bufwrit.newLine();
 			bufwrit.write("Data: " + data);
