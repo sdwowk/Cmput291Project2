@@ -118,13 +118,11 @@ public abstract class FileTest {
     			//System.out.println("Zero key/data pairs retrieved.");
     		}
     		System.out.println("There were " + recordCount + " keys retrieved");
-    		return returns;
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
     	System.out.println("Exception occurred, unable to search for data");
-    	return null;
     }
     
     public void getKey(String in_data){

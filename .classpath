@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/usr/share/java/db.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Sleepycat Software/Berkeley DB 4.3.29/jar/debug/db.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

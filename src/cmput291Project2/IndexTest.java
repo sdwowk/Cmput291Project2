@@ -1,7 +1,6 @@
 package cmput291Project2;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.sleepycat.db.Cursor;
@@ -23,7 +22,7 @@ public class IndexTest extends FileTest {
 	private static Database my_table;
 	private static Database index;
 	private static int RECORD_NUM = 100000;
-	private static javafx.scene.Cursor myCursor = null;
+	private static Cursor myCursor = null;
 	
 	public IndexTest(){
 		INDEX_TABLE = "/tmp/sdwowk_mstrong_db/Index_Table";
@@ -158,10 +157,12 @@ public class IndexTest extends FileTest {
     			System.out.println("One key/data pair retrieved.");
     			recordsCount++;
     			
+    			writeAnswers(returnData, in_data);
     			/*Add multiple values*/
     			myCursor = index.openCursor(null, null);
     			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				returnData = new String(returnDataByte.getData(), "UTF-8");
+    				writeAnswers(returnData, in_data);
     				recordsCount++;
     			}
     			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
@@ -181,17 +182,16 @@ public class IndexTest extends FileTest {
 					e.printStackTrace();
 				}
 			}
+    	}
     }
 
 	@Override
     public void getRange(String start, String end)
     {
 		/*Similar method to getKey, add matches to ArrayList until start=end*/
-    	ArrayList<String[]> returnList = new ArrayList<String[]>();
     	String temp;
     	String tempK;
     	int recordCount = 0;
-    	String[] returnListArray = new String[2];
     	try {
     		DatabaseEntry foundData = new DatabaseEntry();
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
