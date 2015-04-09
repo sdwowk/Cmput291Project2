@@ -92,6 +92,7 @@ public abstract class FileTest {
     public void getData(String in_key){
     	/*Performs basic search for given key*/
     	int recordCount = 0;
+    	boolean amIinRange = false;
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
     	try{
@@ -104,10 +105,14 @@ public abstract class FileTest {
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				if(searchKey.equals(in_key)){
+    					amIinRange = true;
     					returnData = new String(returnDataByte.getData(), "UTF-8");
     					recordCount++;
     					writeAnswers(in_key, returnData);
     				}
+    				else
+    					if(amIinRange == true)
+    						break;
     			}
     			myCursor.close();
     		}
@@ -128,7 +133,6 @@ public abstract class FileTest {
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
 			myCursor = my_table.openCursor(null, null);
 			
-			/*This feels dirty but I can't think of a better way to search by data*/
 			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
 			{
 				if (searchData.equals(foundData)){
@@ -157,12 +161,15 @@ public abstract class FileTest {
     
     public boolean inRange(String start, String end, byte[] foundKeyByte)
     {
-    	String foundKey = "";
+    	String foundKeyStart = "";
+    	String foundKeyEnd = "";
     	/*take first few characters of foundKeyByte and turn into a String*/
     	for ( int j = 0; j < start.length(); j++ ) 
-  		  foundKey+=(new Character((char)(foundKeyByte[j]))).toString();
-    	if (end.compareTo(foundKey) >= 0)
-    		if(start.compareTo(foundKey) <= 0)
+  		  foundKeyStart+=(new Character((char)(foundKeyByte[j]))).toString();
+    	for ( int j = 0; j < end.length(); j++ ) 
+    		  foundKeyEnd+=(new Character((char)(foundKeyByte[j]))).toString();
+    	if (end.compareTo(foundKeyEnd) >= 0)
+    		if(start.compareTo(foundKeyStart) <= 0)
     			return true;
     	return false;
     }

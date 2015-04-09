@@ -52,129 +52,89 @@ public class IndexTest extends FileTest {
 	
 	static void populateTable(Database index) {
 		int range;
-        DatabaseEntry keydb, datadb;
-	String s;
+		DatabaseEntry keydb, datadb;
+		String s;
 
-	/*  
-	 *  generate a random string with the length between 64 and 127,
-	 *  inclusive.
-	 *
-	 *  Seed the random number once and once only.
-	 */
-	Random random = new Random(1000000);
-	
-        try {
-            for (int i = 0; i < RECORD_NUM; i++) {
+		/*  
+		 *  generate a random string with the length between 64 and 127,
+		 *  inclusive.
+		 *
+		 *  Seed the random number once and once only.
+		 */
+		Random random = new Random(1000000);
 
-            	/* to generate a key string */
-            	range = 64 + random.nextInt( 64 );
-            	s = "";
-            	for ( int j = 0; j < range; j++ ) 
-            		s+=(new Character((char)(97+random.nextInt(26)))).toString();
-            	
-            	/* to create a DBT for key */
-            	keydb = new DatabaseEntry(s.getBytes());
+		try {
+			for (int i = 0; i < RECORD_NUM; i++) {
+
+				/* to generate a key string */
+				range = 64 + random.nextInt( 64 );
+				s = "";
+				for ( int j = 0; j < range; j++ ) 
+					s+=(new Character((char)(97+random.nextInt(26)))).toString();
+
+				/* to create a DBT for key */
+				keydb = new DatabaseEntry(s.getBytes());
 				keydb.setSize(s.length()); 
-		
-		
+
+
 				/* to generate a data string */
 				range = 64 + random.nextInt( 64 );
 				s = "";
 				for ( int j = 0; j < range; j++ ) 
-				  s+=(new Character((char)(97+random.nextInt(26)))).toString();
-		  
-				
+					s+=(new Character((char)(97+random.nextInt(26)))).toString();
+
+
 				/* to create a DBT for data */
 				datadb = new DatabaseEntry(s.getBytes());
 				datadb.setSize(s.length()); 
-		
+
 				/* To insert the key/data pair into the database, index file swaps keys and data from the database, 
 				 * Don't want to have extra key's holding same data however so if/else to keep it neat. */
-		        if(my_table.putNoOverwrite(null, keydb, datadb) == OperationStatus.KEYEXIST){
-		        	
-		        }else{
-		        	index.put(null, datadb, keydb);
-		        }
-            }
-        }
-        catch (DatabaseException dbe) {
-            System.err.println("Populate the table: "+dbe.toString());
-        }
-	}
-	
-	@Override
-	public void getData(String in_key){
-		int recordsCount = 0;
-		/*Performs basic search for given key*/
-    	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
-    	DatabaseEntry returnDataByte = new DatabaseEntry();
-    	try{
-    		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
-    		{
-    			String returnData = new String(returnDataByte.getData(), "UTF-8");
-    			//System.out.println("One key/data pair retrieved.");
-    			recordsCount++;
-    			super.writeAnswers(in_key, returnData);
-    			myCursor = my_table.openCursor(null, null);
-    			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
-    				returnData = new String(returnDataByte.getData(), "UTF-8");
-        			recordsCount++;
-        			super.writeAnswers(in_key, returnData);
-    			}
-    			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
+				if(my_table.putNoOverwrite(null, keydb, datadb) == OperationStatus.KEYEXIST){
 
-    		}
-    		else{
-    			System.out.println("Zero key/data pairs retrieved.");
-    			
-    		}
-    	}
-    	catch(Exception e){
-    		e.printStackTrace();
-    	}finally{
-    		if (myCursor!=null)
-			{
-				try {
-					myCursor.close();
-				} catch (DatabaseException e) {
-					e.printStackTrace();
+				}else{
+					index.put(null, datadb, keydb);
 				}
 			}
-    	}
-    }
+		}
+		catch (DatabaseException dbe) {
+			System.err.println("Populate the table: "+dbe.toString());
+		}
+	}
 	
 	
 	@Override
     public void getKey(String in_data){
-    	/*Performs basic search for given key*/
-    	DatabaseEntry searchKey = new DatabaseEntry(in_data.getBytes());
-    	DatabaseEntry returnDataByte = new DatabaseEntry();
-    	int recordsCount = 0;
-    	try{
-    		if(index.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
-    		{
-    			String returnData = new String(returnDataByte.getData(), "UTF-8");
-    			System.out.println("One key/data pair retrieved.");
-    			recordsCount++;
-    			
-    			writeAnswers(returnData, in_data);
-    			/*Add multiple values*/
-    			myCursor = index.openCursor(null, null);
-    			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
-    				returnData = new String(returnDataByte.getData(), "UTF-8");
-    				writeAnswers(returnData, in_data);
-    				recordsCount++;
-    			}
-    			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
-    		}
-    		else{
-    			System.out.println("Zero key/data pairs retrieved.");
-    		}
-    	}
-    	catch(Exception e){
-    		e.printStackTrace();
-    	}finally{
-    		if (myCursor!=null)
+    	String returnKey = "Exception occurred, unable to search for key";
+    	int recordCount = 0;
+    	try {
+    		
+    		DatabaseEntry searchData = new DatabaseEntry(in_data.getBytes());
+    		DatabaseEntry foundData = new DatabaseEntry();
+    		DatabaseEntry returnKeyByte = new DatabaseEntry();
+    		boolean amIinRange = false;
+			myCursor = my_table.openCursor(null, null);
+			
+			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+			{
+				if (searchData.equals(foundData)){
+					amIinRange = true;
+					returnKey = new String(returnKeyByte.getData(), "UTF-8");
+					writeAnswers(returnKey, in_data);
+					recordCount++;
+				}
+				else
+					if(amIinRange == true)
+						break;
+			}
+			System.out.println("There were " + recordCount + " keys retrieved");
+			
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally{
+			if (myCursor!=null)
 			{
 				try {
 					myCursor.close();
@@ -182,8 +142,49 @@ public class IndexTest extends FileTest {
 					e.printStackTrace();
 				}
 			}
-    	}
+		}
     }
+//    public void getKey(String in_data){
+//    	/*Performs basic search for given key*/
+//    	DatabaseEntry searchKey = new DatabaseEntry(in_data.getBytes());
+//    	DatabaseEntry returnDataByte = new DatabaseEntry();
+//    	Cursor myCursor = null;
+//    	int recordsCount = 0;
+//    	try{
+//    		if(index.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+//    		{
+//    			String returnData = new String(returnDataByte.getData(), "UTF-8");
+//    			System.out.println("One key/data pair retrieved.");
+//    			recordsCount++;
+//    			
+//    			writeAnswers(returnData, in_data);
+//    			/*Add multiple values*/
+//    			myCursor = index.openCursor(null, null);
+//    			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+//    				returnData = new String(returnDataByte.getData(), "UTF-8");
+//    				writeAnswers(returnData, in_data);
+//    				recordsCount++;
+//    			}
+//    			myCursor.close();
+//    			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
+//    		}
+//    		else{
+//    			System.out.println("Zero key/data pairs retrieved.");
+//    		}
+//    	}
+//    	catch(Exception e){
+//    		e.printStackTrace();
+//    	}finally{
+//    		if (myCursor!=null)
+//			{
+//				try {
+//					myCursor.close();
+//				} catch (DatabaseException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//    	}
+//    }
 
 	@Override
     public void getRange(String start, String end)
@@ -200,7 +201,7 @@ public class IndexTest extends FileTest {
 			
 			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
 			{
-				if(super.inRange(start, end, foundData.getData()))
+				if(super.inRange(start, end, returnKeyByte.getData()))
 				{
 					recordCount++;
 					tempK = new String(returnKeyByte.getData(), "UTF-8");
