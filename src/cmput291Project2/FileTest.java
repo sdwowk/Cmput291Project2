@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.sleepycat.db.*;
@@ -47,11 +46,8 @@ public abstract class FileTest {
 		/* to create a DBT for key */
 		keydb = new DatabaseEntry(s.getBytes());
 		keydb.setSize(s.length()); 
-		if(i == 100){
+		if(i == 100 || i== 1000 || i==4000 || i==6000){
 			System.out.println("Key: " + s);
-		}
-		if(i == 300){
-			System.out.println("Key: " +s);
 		}
 
 		/* to generate a data string */
@@ -103,26 +99,23 @@ public abstract class FileTest {
     		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
-
     			recordCount++;
     			writeAnswers(in_key, returnData);
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
-    				returnData = new String(returnDataByte.getData(), "UTF-8");
-    				recordCount++;
-    				writeAnswers(in_key, returnData);
+    				if(searchKey.equals(in_key)){
+    					returnData = new String(returnDataByte.getData(), "UTF-8");
+    					recordCount++;
+    					writeAnswers(in_key, returnData);
+    				}
     			}
     			myCursor.close();
     		}
-    		else{
-    			//System.out.println("Zero key/data pairs retrieved.");
-    		}
-    		System.out.println("There were " + recordCount + " keys retrieved");
+    		System.out.println("There were " + recordCount + " data entries retrieved");
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	System.out.println("Exception occurred, unable to search for data");
     }
     
     public void getKey(String in_data){
@@ -181,7 +174,6 @@ public abstract class FileTest {
     	String tempK;
     	String[] returnListArray = new String[2];
     	int recordCount = 0;
-    	boolean amIinRange = false;
     	try {
     		DatabaseEntry foundData = new DatabaseEntry();
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
@@ -193,7 +185,6 @@ public abstract class FileTest {
 
 				if(inRange(start, end, returnKeyByte.getData()))
 				{
-					amIinRange = true;
 					/*we should probably just be writing the key/data pair to answers, 
 					 * and not even bother with returning the data at all
 					 */
@@ -205,11 +196,8 @@ public abstract class FileTest {
 					
 					writeAnswers(returnListArray[0],returnListArray[1]);
 					
-					//returnList.add(returnListArray);
-				
 				}
-				//else
-					//if(amIinRange == true)
+
 			}
 			System.out.println("There were " + recordCount + " key/value pairs retrieved.");
 	
