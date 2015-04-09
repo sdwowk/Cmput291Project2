@@ -1,7 +1,5 @@
 package cmput291Project2;
-import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.Random;
 
 import com.sleepycat.db.*;
 
@@ -57,13 +55,9 @@ public class BinaryTreeTest extends FileTest {
 				if(inRange(start, end, returnKeyByte.getData()))
 				{
 					amIinRange = true;
-					/*we should probably just be writing the key/data pair to answers, 
-					 * and not even bother with returning the data at all
-					 */
 					recordCount++;
 					tempK = new String(returnKeyByte.getData(), "UTF-8");
 					temp = new String(foundData.getData(), "UTF-8");
-					
 					writeAnswers(tempK,temp);				
 				}
 				else
@@ -87,6 +81,4 @@ public class BinaryTreeTest extends FileTest {
 			}
 		}
     }
-
-	
 }

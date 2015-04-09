@@ -1,11 +1,7 @@
 package cmput291Project2;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Main {
 	static Scanner in;
@@ -116,10 +112,9 @@ public class Main {
 		String query = in.next();
 	
 		long start = System.nanoTime();
-		ArrayList<String> result = fileTest.getData(query);
+		fileTest.getData(query);
 		long end = System.nanoTime();
 		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
-		System.out.println("Number of files retrieved: " + result.size());
 		
 		//(if result == null){
 		//	System.out.println("Nothing found");
@@ -156,37 +151,6 @@ public class Main {
 		}
 		*/
 
-	}
-	
-
-	private static void writeAnswers(String key, String data)
-	{
-		//from http://alvinalexander.com/java/edu/qanda/pjqa00009.shtml
-		BufferedWriter bufwrit = null;
-		try{
-			bufwrit = new BufferedWriter(new FileWriter("answers.txt",true));
-			bufwrit.write("Key: " + key);
-			bufwrit.newLine();
-			bufwrit.write("Data: " + data);
-			bufwrit.newLine();
-			bufwrit.newLine();
-			bufwrit.flush();
-		}
-		catch(IOException e){
-			System.out.println("Something went wrong writing to answers.");
-			e.printStackTrace();
-		}
-		finally{
-			if (bufwrit == null)
-			{
-				try {
-					bufwrit.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				
-				} 
-			}
-		}
 	}
 	
 	private static void displayOptions(){
