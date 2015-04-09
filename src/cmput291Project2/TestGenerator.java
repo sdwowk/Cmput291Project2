@@ -1,9 +1,6 @@
 package cmput291Project2;
-import java.util.HashMap;
 
 class TestGenerator {
-	
-	private static HashMap<String, FileTest> types;
 
 	public static FileTest getFileTest(String type){
 		try{
@@ -19,9 +16,6 @@ class TestGenerator {
 			return null;
 		}catch(Exception e){
 			return null;	
-		}
-
-		
+		}	
 	}
-
 }

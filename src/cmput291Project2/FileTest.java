@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.sleepycat.db.*;
@@ -47,11 +46,8 @@ public abstract class FileTest {
 		/* to create a DBT for key */
 		keydb = new DatabaseEntry(s.getBytes());
 		keydb.setSize(s.length()); 
-		if(i == 100){
+		if(i == 100 || i== 1000 || i==4000 || i==6000){
 			System.out.println("Key: " + s);
-		}
-		if(i == 300){
-			System.out.println("Key: " +s);
 		}
 
 		/* to generate a data string */
@@ -96,6 +92,7 @@ public abstract class FileTest {
     public void getData(String in_key){
     	/*Performs basic search for given key*/
     	int recordCount = 0;
+    	boolean amIinRange = false;
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
     	try{
@@ -103,26 +100,27 @@ public abstract class FileTest {
     		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
-
     			recordCount++;
     			writeAnswers(in_key, returnData);
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
-    				returnData = new String(returnDataByte.getData(), "UTF-8");
-    				recordCount++;
-    				writeAnswers(in_key, returnData);
+    				if(searchKey.equals(in_key)){
+    					amIinRange = true;
+    					returnData = new String(returnDataByte.getData(), "UTF-8");
+    					recordCount++;
+    					writeAnswers(in_key, returnData);
+    				}
+    				else
+    					if(amIinRange == true)
+    						break;
     			}
     			myCursor.close();
     		}
-    		else{
-    			//System.out.println("Zero key/data pairs retrieved.");
-    		}
-    		System.out.println("There were " + recordCount + " keys retrieved");
+    		System.out.println("There were " + recordCount + " data entries retrieved");
     	}
     	catch(Exception e){
     		e.printStackTrace();
     	}
-    	System.out.println("Exception occurred, unable to search for data");
     }
     
     public void getKey(String in_data){
@@ -135,7 +133,6 @@ public abstract class FileTest {
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
 			myCursor = my_table.openCursor(null, null);
 			
-			/*This feels dirty but I can't think of a better way to search by data*/
 			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
 			{
 				if (searchData.equals(foundData)){
@@ -164,12 +161,15 @@ public abstract class FileTest {
     
     public boolean inRange(String start, String end, byte[] foundKeyByte)
     {
-    	String foundKey = "";
+    	String foundKeyStart = "";
+    	String foundKeyEnd = "";
     	/*take first few characters of foundKeyByte and turn into a String*/
     	for ( int j = 0; j < start.length(); j++ ) 
-  		  foundKey+=(new Character((char)(foundKeyByte[j]))).toString();
-    	if (end.compareTo(foundKey) >= 0)
-    		if(start.compareTo(foundKey) <= 0)
+  		  foundKeyStart+=(new Character((char)(foundKeyByte[j]))).toString();
+    	for ( int j = 0; j < end.length(); j++ ) 
+    		  foundKeyEnd+=(new Character((char)(foundKeyByte[j]))).toString();
+    	if (end.compareTo(foundKeyEnd) >= 0)
+    		if(start.compareTo(foundKeyStart) <= 0)
     			return true;
     	return false;
     }
@@ -181,7 +181,6 @@ public abstract class FileTest {
     	String tempK;
     	String[] returnListArray = new String[2];
     	int recordCount = 0;
-    	boolean amIinRange = false;
     	try {
     		DatabaseEntry foundData = new DatabaseEntry();
     		DatabaseEntry returnKeyByte = new DatabaseEntry();
@@ -193,7 +192,6 @@ public abstract class FileTest {
 
 				if(inRange(start, end, returnKeyByte.getData()))
 				{
-					amIinRange = true;
 					/*we should probably just be writing the key/data pair to answers, 
 					 * and not even bother with returning the data at all
 					 */
@@ -205,11 +203,8 @@ public abstract class FileTest {
 					
 					writeAnswers(returnListArray[0],returnListArray[1]);
 					
-					//returnList.add(returnListArray);
-				
 				}
-				//else
-					//if(amIinRange == true)
+
 			}
 			System.out.println("There were " + recordCount + " key/value pairs retrieved.");
 	

@@ -1,5 +1,6 @@
 package cmput291Project2;
-import java.util.Random;
+
+import java.io.UnsupportedEncodingException;
 
 import com.sleepycat.db.*;
 
@@ -37,6 +38,78 @@ public class HashMapTest extends FileTest {
 		}
 	}
 	
+	@Override
+	public void getRange(String start, String end)
+    {
+    	String temp;
+    	String tempK;
+    	Cursor myCursor = null;
+    	int recordCount = 0;
+    	try {
+    		DatabaseEntry foundData = new DatabaseEntry();
+    		DatabaseEntry returnKeyByte = new DatabaseEntry();
+			myCursor = my_table.openCursor(null, null);
+			
+			
+			while(myCursor.getNext(returnKeyByte, foundData, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+			{
+
+				if(inRange(start, end, returnKeyByte.getData()))
+				{
+					recordCount++;
+					tempK = new String(returnKeyByte.getData(), "UTF-8");
+					temp = new String(foundData.getData(), "UTF-8");
+					writeAnswers(tempK,temp);				
+				}
+
+			}
+			System.out.println("There were " + recordCount + " key/value pairs retrieved.");
 	
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} finally{
+			if (myCursor!=null)
+			{
+				try {
+					myCursor.close();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+    }
+	
+	@Override
+    public void getData(String in_key){
+    	/*Performs basic search for given key*/
+    	int recordCount = 0;
+    	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
+    	DatabaseEntry returnDataByte = new DatabaseEntry();
+    	Cursor myCursor = null;
+    	try{
+    		
+    		if(my_table.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
+    		{
+    			String returnData = new String(returnDataByte.getData(), "UTF-8");
+    			recordCount++;
+    			writeAnswers(in_key, returnData);
+    			myCursor = my_table.openCursor(null, null);
+    			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
+    				if(searchKey.equals(in_key)){
+    					returnData = new String(returnDataByte.getData(), "UTF-8");
+    					recordCount++;
+    					writeAnswers(in_key, returnData);
+    				}
+    			}
+    			myCursor.close();
+    		}
+    		System.out.println("There were " + recordCount + " data entries retrieved");
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    }
 
 }
