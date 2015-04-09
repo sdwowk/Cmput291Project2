@@ -28,7 +28,7 @@ public class HashMapTest extends FileTest {
 	
 		    /* populate the new database RECORD_NUM records */
 		    //I think we can reuse populateTable, key/data insertion seems to be the same..
-		    this.populateTable(my_table);
+		    FileTest.populateTable(my_table);
 		    System.out.println("100 000 records inserted into" + HASH_TABLE);
 		    
 		    super.setDB(my_table);

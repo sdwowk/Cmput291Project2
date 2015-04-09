@@ -28,16 +28,18 @@ public class Main {
 		}
 		*/
 		
-
+		int choice;
 		while(true){
 			
 			displayOptions();
-			int choice = in.nextInt();
-			switch(choice){
+			try{
+				choice = in.nextInt();
+
+				switch(choice){
 				case 1:
-				fileTest.createDB();
-				
-				break;
+					fileTest.createDB();
+
+					break;
 				case 2:
 					keyMenu();
 					break;
@@ -64,7 +66,7 @@ public class Main {
 							System.out.println("Could not delete database");
 						}
 					}else{
-						
+
 						File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
 						try{
 							db.delete();
@@ -77,11 +79,15 @@ public class Main {
 				case 6:
 					System.exit(0);
 					break;
-				
+
 				default:
 					System.out.println("Improper input");
+				}
 			}
-				
+			catch(Exception e){
+				System.out.println("Improper input, quitting everything!");
+				System.exit(0);
+			}
 				
 		}
 	}
