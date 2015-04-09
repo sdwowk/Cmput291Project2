@@ -98,7 +98,7 @@ public class Main {
 		String query = in.next();
 		
 		long start = System.nanoTime();
-		fileTest.getKey(query);
+
 		long end = System.nanoTime();
 		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
 		//for(String results : result){
@@ -116,10 +116,9 @@ public class Main {
 		String query = in.next();
 	
 		long start = System.nanoTime();
-		ArrayList<String> result = fileTest.getData(query);
+
 		long end = System.nanoTime();
 		System.out.println("Time taken to execute query (us): " + getMicros(start, end));
-		System.out.println("Number of files retrieved: " + result.size());
 		
 		//(if result == null){
 		//	System.out.println("Nothing found");
