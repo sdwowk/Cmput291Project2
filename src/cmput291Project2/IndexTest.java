@@ -105,8 +105,8 @@ public class IndexTest extends FileTest {
 	
 	@Override
 	public ArrayList<String> getData(String in_key){
-		ArrayList<String> returnList = new ArrayList<String>();
-    	/*Performs basic search for given key*/
+		int recordsCount = 0;
+		/*Performs basic search for given key*/
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
     	try{
@@ -114,14 +114,16 @@ public class IndexTest extends FileTest {
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			//System.out.println("One key/data pair retrieved.");
-    			returnList.add(returnData);
+    			recordsCount++;
     			
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				String returnData = new String(returnDataByte.getData(), "UTF-8");
-        			returnList.add(returnData);
+        			recordsCount++;
 
     			}
+    			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
+
     			myCursor.close();
     		}
     		else{
@@ -142,20 +144,21 @@ public class IndexTest extends FileTest {
     	/*Performs basic search for given key*/
     	DatabaseEntry searchKey = new DatabaseEntry(in_data.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
-    	ArrayList<String> returns = new ArrayList<String>();
+    	int recordsCount = 0;
     	try{
     		if(index.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			System.out.println("One key/data pair retrieved.");
-    			returns.add(returnData);
+    			recordsCount++;
     			
     			/*Add multiple values*/
     			myCursor = index.openCursor(null, null);
     			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				returnData = new String(returnDataByte.getData(), "UTF-8");
-    				returns.add(returnData);
+    				recordsCount++;
     			}
+    			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
     			myCursor.close();
     		}
     		else{
