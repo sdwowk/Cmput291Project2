@@ -52,9 +52,8 @@ public class Main {
 				case 5:
 					//destroy database
 					//close database
-					
+					fileTest.closeDB();
 					if(fileTest instanceof IndexTest){
-						fileTest.closeDB();
 						File idb = new File("/tmp/sdwowk_mstrong_db/Index_Table");
 						File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
 						try{
@@ -65,7 +64,7 @@ public class Main {
 							System.out.println("Could not delete database");
 						}
 					}else{
-						fileTest.closeDB();
+						
 						File db = new File("/tmp/sdwowk_mstrong_db/Data_Table");
 						try{
 							db.delete();
