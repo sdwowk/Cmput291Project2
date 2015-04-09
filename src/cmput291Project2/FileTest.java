@@ -93,9 +93,9 @@ public abstract class FileTest {
 		}
     }
     
-    public ArrayList<String> getData(String in_key){
+    public void getData(String in_key){
     	/*Performs basic search for given key*/
-    	ArrayList<String> returns = new ArrayList<String>();
+    	int recordCount = 0;
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
     	DatabaseEntry returnDataByte = new DatabaseEntry();
     	try{
@@ -104,18 +104,20 @@ public abstract class FileTest {
     		{
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
 
-    			returns.add(returnData);
+    			recordCount++;
+    			writeAnswers(in_key, returnData);
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNext(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
     				returnData = new String(returnDataByte.getData(), "UTF-8");
-    				returns.add(returnData);
+    				recordCount++;
+    				writeAnswers(in_key, returnData);
     			}
     			myCursor.close();
     		}
     		else{
     			//System.out.println("Zero key/data pairs retrieved.");
     		}
-    		
+    		System.out.println("There were " + recordCount + " keys retrieved");
     		return returns;
     	}
     	catch(Exception e){

@@ -104,7 +104,7 @@ public class IndexTest extends FileTest {
 	}
 	
 	@Override
-	public ArrayList<String> getData(String in_key){
+	public void getData(String in_key){
 		int recordsCount = 0;
 		/*Performs basic search for given key*/
     	DatabaseEntry searchKey = new DatabaseEntry(in_key.getBytes());
@@ -115,27 +115,33 @@ public class IndexTest extends FileTest {
     			String returnData = new String(returnDataByte.getData(), "UTF-8");
     			//System.out.println("One key/data pair retrieved.");
     			recordsCount++;
-    			
+    			super.writeAnswers(in_key, returnData);
     			myCursor = my_table.openCursor(null, null);
     			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
-    				String returnData = new String(returnDataByte.getData(), "UTF-8");
+    				returnData = new String(returnDataByte.getData(), "UTF-8");
         			recordsCount++;
-
+        			super.writeAnswers(in_key, returnData);
     			}
     			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
 
-    			myCursor.close();
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
     			
     		}
-    		return returnList;
     	}
     	catch(Exception e){
     		e.printStackTrace();
+    	}finally{
+    		if (myCursor!=null)
+			{
+				try {
+					myCursor.close();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}
+			}
     	}
-    	return null;
     }
 	
 	
@@ -159,7 +165,6 @@ public class IndexTest extends FileTest {
     				recordsCount++;
     			}
     			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
-    			myCursor.close();
     		}
     		else{
     			System.out.println("Zero key/data pairs retrieved.");
@@ -167,7 +172,15 @@ public class IndexTest extends FileTest {
     	}
     	catch(Exception e){
     		e.printStackTrace();
-    	}
+    	}finally{
+    		if (myCursor!=null)
+			{
+				try {
+					myCursor.close();
+				} catch (DatabaseException e) {
+					e.printStackTrace();
+				}
+			}
     }
 
 	@Override
