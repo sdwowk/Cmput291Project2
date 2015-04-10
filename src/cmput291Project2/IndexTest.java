@@ -144,52 +144,12 @@ public class IndexTest extends FileTest {
 			}
 		}
     }
-//    public void getKey(String in_data){
-//    	/*Performs basic search for given key*/
-//    	DatabaseEntry searchKey = new DatabaseEntry(in_data.getBytes());
-//    	DatabaseEntry returnDataByte = new DatabaseEntry();
-//    	Cursor myCursor = null;
-//    	int recordsCount = 0;
-//    	try{
-//    		if(index.get(null, searchKey, returnDataByte, LockMode.DEFAULT)==OperationStatus.SUCCESS)
-//    		{
-//    			String returnData = new String(returnDataByte.getData(), "UTF-8");
-//    			System.out.println("One key/data pair retrieved.");
-//    			recordsCount++;
-//    			
-//    			writeAnswers(returnData, in_data);
-//    			/*Add multiple values*/
-//    			myCursor = index.openCursor(null, null);
-//    			while(myCursor.getNextDup(searchKey, returnDataByte, LockMode.DEFAULT) == OperationStatus.SUCCESS){
-//    				returnData = new String(returnDataByte.getData(), "UTF-8");
-//    				writeAnswers(returnData, in_data);
-//    				recordsCount++;
-//    			}
-//    			myCursor.close();
-//    			System.out.println("There were " + String.valueOf(recordsCount) + "key/value pairs found.");
-//    		}
-//    		else{
-//    			System.out.println("Zero key/data pairs retrieved.");
-//    		}
-//    	}
-//    	catch(Exception e){
-//    		e.printStackTrace();
-//    	}finally{
-//    		if (myCursor!=null)
-//			{
-//				try {
-//					myCursor.close();
-//				} catch (DatabaseException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//    	}
-//    }
+
 
 	@Override
     public void getRange(String start, String end)
     {
-		/*Similar method to getKey, add matches to ArrayList until start=end*/
+		
     	String temp;
     	String tempK;
     	int recordCount = 0;
